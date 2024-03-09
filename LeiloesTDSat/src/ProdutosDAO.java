@@ -43,7 +43,7 @@ public class ProdutosDAO {
         }
     }
     
-    public ArrayList<ProdutosDTO> listarProdutos(){
+    public ArrayList<ProdutosDTO> listarProdutos() {
         
         try {
             conn = new conectaDAO().connectDB();
@@ -81,6 +81,32 @@ public class ProdutosDAO {
         } catch (SQLException e) {
             System.out.println("Erro ao vender produto.");
         }
+    }
+    
+    public ArrayList<ProdutosDTO> listarProdutosVendidos() {
+        try {
+            conn = new conectaDAO().connectDB();
+            
+            String sql = "SELECT * FROM produtos WHERE status = 'Vendido'";
+            prep = conn.prepareStatement(sql);
+            resultset = prep.executeQuery();
+
+            while (resultset.next()) {
+                ProdutosDTO produto = new ProdutosDTO();
+                
+                produto.setId(resultset.getInt("id"));
+                produto.setNome(resultset.getString("nome"));
+                produto.setValor(resultset.getInt("valor"));
+                produto.setStatus(resultset.getString("status"));
+                
+                listagem.add(produto);
+            }
+            
+        } catch (SQLException e) {
+            System.out.println("Erro ao listar os registros.");
+        }
+        
+        return listagem;
     }
 }
 
